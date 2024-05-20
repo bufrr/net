@@ -1,6 +1,9 @@
 package log
 
-import logging "github.com/op/go-logging"
+import (
+	logging "github.com/op/go-logging"
+	"os"
+)
 
 // Logger is the logger interface
 type Logger interface {
@@ -16,6 +19,13 @@ type Logger interface {
 
 // The global logger object
 var logger Logger = logging.MustGetLogger("nnet")
+
+func init() {
+	backend1 := logging.NewLogBackend(os.Stderr, "", 0)
+	backend1Leveled := logging.AddModuleLevel(backend1)
+	backend1Leveled.SetLevel(logging.WARNING, "")
+	logger.(*logging.Logger).SetBackend(backend1Leveled)
+}
 
 // SetLogger sets the global logger object
 func SetLogger(l Logger) error {
