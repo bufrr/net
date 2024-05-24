@@ -3,9 +3,9 @@ package config
 import (
 	"time"
 
+	"dario.cat/mergo"
 	protobuf "github.com/bufrr/net/protobuf"
 	"github.com/bufrr/net/transport"
-	"github.com/imdario/mergo"
 )
 
 // Config is the configuration struct
