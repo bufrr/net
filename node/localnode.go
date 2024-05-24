@@ -11,7 +11,7 @@ import (
 	"github.com/bufrr/net/cache"
 	"github.com/bufrr/net/config"
 	"github.com/bufrr/net/log"
-	"github.com/bufrr/net/protobuf"
+	protobuf "github.com/bufrr/net/protobuf"
 	"github.com/bufrr/net/transport"
 )
 

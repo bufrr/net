@@ -5,7 +5,7 @@ import (
 
 	"github.com/bufrr/net/node"
 	"github.com/bufrr/net/overlay/routing"
-	"github.com/bufrr/net/protobuf"
+	protobuf "github.com/bufrr/net/protobuf"
 )
 
 // Network is the overlay network interface

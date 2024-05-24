@@ -5,7 +5,7 @@ import (
 	"net"
 
 	"github.com/bufrr/net/middleware"
-	"github.com/bufrr/net/protobuf"
+	protobuf "github.com/bufrr/net/protobuf"
 )
 
 // BytesReceived is called when local node receive user-defined BYTES message.

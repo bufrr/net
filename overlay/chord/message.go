@@ -3,8 +3,8 @@ package chord
 import (
 	"github.com/bufrr/net/message"
 	"github.com/bufrr/net/node"
-	"github.com/bufrr/net/protobuf"
-	"github.com/gogo/protobuf/proto"
+	protobuf "github.com/bufrr/net/protobuf"
+	"google.golang.org/protobuf/proto"
 )
 
 // NewGetSuccAndPredMessage creates a GET_SUCC_AND_PRED message to get the
@@ -26,8 +26,8 @@ func NewGetSuccAndPredMessage(numSucc, numPred uint32, msgIDBytes uint8) (*proto
 	}
 
 	msg := &protobuf.Message{
-		MessageType: protobuf.GET_SUCC_AND_PRED,
-		RoutingType: protobuf.DIRECT,
+		MessageType: protobuf.MessageType_GET_SUCC_AND_PRED,
+		RoutingType: protobuf.RoutingType_DIRECT,
 		MessageId:   id,
 		Message:     buf,
 	}
@@ -54,8 +54,8 @@ func (c *Chord) NewGetSuccAndPredReply(replyToID []byte, successors, predecessor
 	}
 
 	msg := &protobuf.Message{
-		MessageType: protobuf.GET_SUCC_AND_PRED,
-		RoutingType: protobuf.DIRECT,
+		MessageType: protobuf.MessageType_GET_SUCC_AND_PRED,
+		RoutingType: protobuf.RoutingType_DIRECT,
 		ReplyToId:   replyToID,
 		MessageId:   id,
 		Message:     buf,
@@ -84,8 +84,8 @@ func (c *Chord) NewFindSuccAndPredMessage(key []byte, numSucc, numPred uint32) (
 	}
 
 	msg := &protobuf.Message{
-		MessageType: protobuf.FIND_SUCC_AND_PRED,
-		RoutingType: protobuf.DIRECT,
+		MessageType: protobuf.MessageType_FIND_SUCC_AND_PRED,
+		RoutingType: protobuf.RoutingType_DIRECT,
 		MessageId:   id,
 		Message:     buf,
 		DestId:      key,
@@ -113,8 +113,8 @@ func (c *Chord) NewFindSuccAndPredReply(replyToID []byte, successors, predecesso
 	}
 
 	msg := &protobuf.Message{
-		MessageType: protobuf.FIND_SUCC_AND_PRED,
-		RoutingType: protobuf.DIRECT,
+		MessageType: protobuf.MessageType_FIND_SUCC_AND_PRED,
+		RoutingType: protobuf.RoutingType_DIRECT,
 		ReplyToId:   replyToID,
 		MessageId:   id,
 		Message:     buf,
@@ -131,7 +131,7 @@ func (c *Chord) handleRemoteMessage(remoteMsg *node.RemoteMessage) (bool, error)
 	}
 
 	switch remoteMsg.Msg.MessageType {
-	case protobuf.GET_SUCC_AND_PRED:
+	case protobuf.MessageType_GET_SUCC_AND_PRED:
 		msgBody := &protobuf.GetSuccAndPred{}
 		err := proto.Unmarshal(remoteMsg.Msg.Message, msgBody)
 		if err != nil {
@@ -158,7 +158,7 @@ func (c *Chord) handleRemoteMessage(remoteMsg *node.RemoteMessage) (bool, error)
 			return false, err
 		}
 
-	case protobuf.FIND_SUCC_AND_PRED:
+	case protobuf.MessageType_FIND_SUCC_AND_PRED:
 		msgBody := &protobuf.FindSuccAndPred{}
 		err := proto.Unmarshal(remoteMsg.Msg.Message, msgBody)
 		if err != nil {

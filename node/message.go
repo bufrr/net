@@ -2,11 +2,11 @@ package node
 
 import (
 	"errors"
+	"google.golang.org/protobuf/proto"
 
 	"github.com/bufrr/net/log"
 	"github.com/bufrr/net/message"
-	"github.com/bufrr/net/protobuf"
-	"github.com/gogo/protobuf/proto"
+	protobuf "github.com/bufrr/net/protobuf"
 )
 
 const (
@@ -45,8 +45,8 @@ func (ln *LocalNode) NewPingMessage() (*protobuf.Message, error) {
 	}
 
 	msg := &protobuf.Message{
-		MessageType: protobuf.PING,
-		RoutingType: protobuf.DIRECT,
+		MessageType: protobuf.MessageType_PING,
+		RoutingType: protobuf.RoutingType_DIRECT,
 		MessageId:   id,
 		Message:     buf,
 	}
@@ -69,8 +69,8 @@ func (ln *LocalNode) NewPingReply(replyToID []byte) (*protobuf.Message, error) {
 	}
 
 	msg := &protobuf.Message{
-		MessageType: protobuf.PING,
-		RoutingType: protobuf.DIRECT,
+		MessageType: protobuf.MessageType_PING,
+		RoutingType: protobuf.RoutingType_DIRECT,
 		ReplyToId:   replyToID,
 		MessageId:   id,
 		Message:     buf,
@@ -95,8 +95,8 @@ func (ln *LocalNode) NewExchangeNodeMessage() (*protobuf.Message, error) {
 	}
 
 	msg := &protobuf.Message{
-		MessageType: protobuf.EXCHANGE_NODE,
-		RoutingType: protobuf.DIRECT,
+		MessageType: protobuf.MessageType_EXCHANGE_NODE,
+		RoutingType: protobuf.RoutingType_DIRECT,
 		MessageId:   id,
 		Message:     buf,
 	}
@@ -121,8 +121,8 @@ func (ln *LocalNode) NewExchangeNodeReply(replyToID []byte) (*protobuf.Message, 
 	}
 
 	msg := &protobuf.Message{
-		MessageType: protobuf.EXCHANGE_NODE,
-		RoutingType: protobuf.DIRECT,
+		MessageType: protobuf.MessageType_EXCHANGE_NODE,
+		RoutingType: protobuf.RoutingType_DIRECT,
 		ReplyToId:   replyToID,
 		MessageId:   id,
 		Message:     buf,
@@ -147,8 +147,8 @@ func (ln *LocalNode) NewStopMessage() (*protobuf.Message, error) {
 	}
 
 	msg := &protobuf.Message{
-		MessageType: protobuf.STOP,
-		RoutingType: protobuf.DIRECT,
+		MessageType: protobuf.MessageType_STOP,
+		RoutingType: protobuf.RoutingType_DIRECT,
 		MessageId:   id,
 		Message:     buf,
 	}
@@ -158,12 +158,12 @@ func (ln *LocalNode) NewStopMessage() (*protobuf.Message, error) {
 
 // handleRemoteMessage handles a remote message and returns error
 func (ln *LocalNode) handleRemoteMessage(remoteMsg *RemoteMessage) error {
-	if remoteMsg.RemoteNode == nil && remoteMsg.Msg.MessageType != protobuf.BYTES {
+	if remoteMsg.RemoteNode == nil && remoteMsg.Msg.MessageType != protobuf.MessageType_BYTES {
 		return errors.New("Message is sent by local node")
 	}
 
 	switch remoteMsg.Msg.MessageType {
-	case protobuf.PING:
+	case protobuf.MessageType_PING:
 		replyMsg, err := ln.NewPingReply(remoteMsg.Msg.MessageId)
 		if err != nil {
 			return err
@@ -174,7 +174,7 @@ func (ln *LocalNode) handleRemoteMessage(remoteMsg *RemoteMessage) error {
 			return err
 		}
 
-	case protobuf.EXCHANGE_NODE:
+	case protobuf.MessageType_EXCHANGE_NODE:
 		msgBody := &protobuf.ExchangeNode{}
 		err := proto.Unmarshal(remoteMsg.Msg.Message, msgBody)
 		if err != nil {
@@ -197,11 +197,11 @@ func (ln *LocalNode) handleRemoteMessage(remoteMsg *RemoteMessage) error {
 			return err
 		}
 
-	case protobuf.STOP:
+	case protobuf.MessageType_STOP:
 		log.Infof("Received stop message from remote node %v", remoteMsg.RemoteNode)
 		remoteMsg.RemoteNode.Stop(nil)
 
-	case protobuf.BYTES:
+	case protobuf.MessageType_BYTES:
 		msgBody := &protobuf.Bytes{}
 		err := proto.Unmarshal(remoteMsg.Msg.Message, msgBody)
 		if err != nil {

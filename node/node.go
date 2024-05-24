@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	"github.com/bufrr/net/common"
-	"github.com/bufrr/net/protobuf"
+	protobuf "github.com/bufrr/net/protobuf"
 )
 
 // Node is a remote or local node

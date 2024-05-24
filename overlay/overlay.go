@@ -8,7 +8,7 @@ import (
 	"github.com/bufrr/net/common"
 	"github.com/bufrr/net/node"
 	"github.com/bufrr/net/overlay/routing"
-	"github.com/bufrr/net/protobuf"
+	protobuf "github.com/bufrr/net/protobuf"
 )
 
 // Overlay is an abstract overlay network

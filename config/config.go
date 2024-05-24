@@ -3,7 +3,7 @@ package config
 import (
 	"time"
 
-	"github.com/bufrr/net/protobuf"
+	protobuf "github.com/bufrr/net/protobuf"
 	"github.com/bufrr/net/transport"
 	"github.com/imdario/mergo"
 )
@@ -64,13 +64,13 @@ func DefaultConfig() *Config {
 		LocalRxMsgChanLen:              23333,
 		LocalHandleMsgChanLen:          23333,
 		LocalHandleMsgWorkers:          1,
-		LocalRxMsgCacheRoutingType:     []protobuf.RoutingType{protobuf.BROADCAST_PUSH},
+		LocalRxMsgCacheRoutingType:     []protobuf.RoutingType{protobuf.RoutingType_BROADCAST_PUSH},
 		LocalRxMsgCacheExpiration:      300 * time.Second,
 		LocalRxMsgCacheCleanupInterval: 10 * time.Second,
 
 		RemoteRxMsgChanLen:              2333,
 		RemoteTxMsgChanLen:              2333,
-		RemoteTxMsgCacheRoutingType:     []protobuf.RoutingType{protobuf.BROADCAST_PUSH},
+		RemoteTxMsgCacheRoutingType:     []protobuf.RoutingType{protobuf.RoutingType_BROADCAST_PUSH},
 		RemoteTxMsgCacheExpiration:      300 * time.Second,
 		RemoteTxMsgCacheCleanupInterval: 10 * time.Second,
 

@@ -3,6 +3,7 @@ package chord
 import (
 	"errors"
 	"fmt"
+	"google.golang.org/protobuf/proto"
 	"sync"
 	"time"
 
@@ -10,9 +11,8 @@ import (
 	"github.com/bufrr/net/node"
 	"github.com/bufrr/net/overlay"
 	"github.com/bufrr/net/overlay/routing"
-	"github.com/bufrr/net/protobuf"
+	protobuf "github.com/bufrr/net/protobuf"
 	"github.com/bufrr/net/util"
-	"github.com/gogo/protobuf/proto"
 )
 
 const (
@@ -90,7 +90,7 @@ func NewChord(localNode *node.LocalNode) (*Chord, error) {
 		middlewareStore:       middlewareStore,
 	}
 
-	directRxMsgChan, err := localNode.GetRxMsgChan(protobuf.DIRECT)
+	directRxMsgChan, err := localNode.GetRxMsgChan(protobuf.RoutingType_DIRECT)
 	if err != nil {
 		return nil, err
 	}
@@ -98,12 +98,12 @@ func NewChord(localNode *node.LocalNode) (*Chord, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = ovl.AddRouter(protobuf.DIRECT, directRouting)
+	err = ovl.AddRouter(protobuf.RoutingType_DIRECT, directRouting)
 	if err != nil {
 		return nil, err
 	}
 
-	relayRxMsgChan, err := localNode.GetRxMsgChan(protobuf.RELAY)
+	relayRxMsgChan, err := localNode.GetRxMsgChan(protobuf.RoutingType_RELAY)
 	if err != nil {
 		return nil, err
 	}
@@ -111,12 +111,12 @@ func NewChord(localNode *node.LocalNode) (*Chord, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = ovl.AddRouter(protobuf.RELAY, relayRouting)
+	err = ovl.AddRouter(protobuf.RoutingType_RELAY, relayRouting)
 	if err != nil {
 		return nil, err
 	}
 
-	broadcastRxMsgChan, err := localNode.GetRxMsgChan(protobuf.BROADCAST_PUSH)
+	broadcastRxMsgChan, err := localNode.GetRxMsgChan(protobuf.RoutingType_BROADCAST_PUSH)
 	if err != nil {
 		return nil, err
 	}
@@ -124,12 +124,12 @@ func NewChord(localNode *node.LocalNode) (*Chord, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = ovl.AddRouter(protobuf.BROADCAST_PUSH, broadcastRouting)
+	err = ovl.AddRouter(protobuf.RoutingType_BROADCAST_PUSH, broadcastRouting)
 	if err != nil {
 		return nil, err
 	}
 
-	broadcastTreeRxMsgChan, err := localNode.GetRxMsgChan(protobuf.BROADCAST_TREE)
+	broadcastTreeRxMsgChan, err := localNode.GetRxMsgChan(protobuf.RoutingType_BROADCAST_TREE)
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +137,7 @@ func NewChord(localNode *node.LocalNode) (*Chord, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = ovl.AddRouter(protobuf.BROADCAST_TREE, broadcastTreeRouting)
+	err = ovl.AddRouter(protobuf.RoutingType_BROADCAST_TREE, broadcastTreeRouting)
 	if err != nil {
 		return nil, err
 	}
@@ -616,7 +616,7 @@ func (c *Chord) FindSuccAndPred(key []byte, numSucc, numPred uint32) ([]*protobu
 		return nil, nil, err
 	}
 
-	reply, _, err := c.SendMessageSync(msg, protobuf.RELAY, 0)
+	reply, _, err := c.SendMessageSync(msg, protobuf.RoutingType_RELAY, 0)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"google.golang.org/protobuf/proto"
 	"net"
 	"sync"
 	"time"
@@ -12,10 +13,9 @@ import (
 	"github.com/bufrr/net/cache"
 	"github.com/bufrr/net/log"
 	"github.com/bufrr/net/multiplexer"
-	"github.com/bufrr/net/protobuf"
+	protobuf "github.com/bufrr/net/protobuf"
 	"github.com/bufrr/net/transport"
 	"github.com/bufrr/net/util"
-	"github.com/gogo/protobuf/proto"
 )
 
 const (

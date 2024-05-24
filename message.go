@@ -1,12 +1,12 @@
 package nnet
 
 import (
+	"google.golang.org/protobuf/proto"
 	"time"
 
 	"github.com/bufrr/net/message"
 	"github.com/bufrr/net/node"
-	"github.com/bufrr/net/protobuf"
-	"github.com/gogo/protobuf/proto"
+	protobuf "github.com/bufrr/net/protobuf"
 )
 
 // NewDirectBytesMessage creates a BYTES message that send arbitrary bytes to a
@@ -27,8 +27,8 @@ func (nn *NNet) NewDirectBytesMessage(data []byte) (*protobuf.Message, error) {
 	}
 
 	msg := &protobuf.Message{
-		MessageType: protobuf.BYTES,
-		RoutingType: protobuf.DIRECT,
+		MessageType: protobuf.MessageType_BYTES,
+		RoutingType: protobuf.RoutingType_DIRECT,
 		MessageId:   id,
 		Message:     buf,
 	}
@@ -54,8 +54,8 @@ func (nn *NNet) NewRelayBytesMessage(data, srcID, key []byte) (*protobuf.Message
 	}
 
 	msg := &protobuf.Message{
-		MessageType: protobuf.BYTES,
-		RoutingType: protobuf.RELAY,
+		MessageType: protobuf.MessageType_BYTES,
+		RoutingType: protobuf.RoutingType_RELAY,
 		MessageId:   id,
 		Message:     buf,
 		SrcId:       srcID,
@@ -83,7 +83,7 @@ func (nn *NNet) NewBroadcastBytesMessage(data, srcID []byte, routingType protobu
 	}
 
 	msg := &protobuf.Message{
-		MessageType: protobuf.BYTES,
+		MessageType: protobuf.MessageType_BYTES,
 		RoutingType: routingType,
 		MessageId:   id,
 		Message:     buf,
@@ -155,7 +155,7 @@ func (nn *NNet) SendBytesRelayAsync(data, key []byte) (bool, error) {
 		return false, err
 	}
 
-	return nn.SendMessageAsync(msg, protobuf.RELAY)
+	return nn.SendMessageAsync(msg, protobuf.RoutingType_RELAY)
 }
 
 // SendBytesRelaySync is the same as SendBytesRelaySync but use default reply
@@ -174,7 +174,7 @@ func (nn *NNet) SendBytesRelaySyncWithTimeout(data, key []byte, replyTimeout tim
 		return nil, nil, err
 	}
 
-	reply, _, err := nn.SendMessageSync(msg, protobuf.RELAY, replyTimeout)
+	reply, _, err := nn.SendMessageSync(msg, protobuf.RoutingType_RELAY, replyTimeout)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -198,7 +198,7 @@ func (nn *NNet) SendBytesRelayReply(replyToID, data, key []byte) (bool, error) {
 
 	msg.ReplyToId = replyToID
 
-	return nn.SendMessageAsync(msg, protobuf.RELAY)
+	return nn.SendMessageAsync(msg, protobuf.RoutingType_RELAY)
 }
 
 // SendBytesBroadcastAsync sends bytes data to EVERY remote node in the network

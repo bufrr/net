@@ -10,7 +10,7 @@ import (
 
 	"github.com/bufrr/net/log"
 	"github.com/bufrr/net/node"
-	"github.com/bufrr/net/protobuf"
+	protobuf "github.com/bufrr/net/protobuf"
 )
 
 const (
